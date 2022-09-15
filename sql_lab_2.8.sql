@@ -1,0 +1,58 @@
+USE sakila;
+
+-- 1. Write a query to display for each store its store ID, city, and country.
+SELECT s.store_id AS 'store_id', c.city AS 'city', b.country AS 'country'
+FROM store s
+JOIN address a
+ON s.address_id = a.address_id
+JOIN city c
+ON a.city_id = c.city_id
+JOIN country b
+ON c.country_id = b.country_id
+GROUP BY s.store_id;
+
+-- 2. Write a query to display how much business, in dollars, each store brought in.
+SELECT s.store_id AS 'store_id', SUM(p.amount) AS 'Amount($)'
+FROM store s
+JOIN staff f
+ON s.store_id = f.staff_id
+JOIN payment p
+ON f.staff_id = p.staff_id
+GROUP BY store_id;
+
+-- 3. Which film categories are longest?
+SELECT c.name AS 'film_name', AVG(i.length) AS 'average_length'
+FROM category c
+JOIN film_category f
+ON c.category_id = f.category_id
+JOIN film i
+ON f.film_id = i.film_id
+GROUP BY c.name
+ORDER BY AVG(i.length) DESC;
+
+
+-- 4. Display the most frequently rented movies in descending order.
+SELECT f.title AS 'film', SUM(f.rental_rate) AS 'rental frequency'
+FROM film f
+GROUP BY f.title
+ORDER BY SUM(f.rental_rate) DESC;
+
+
+-- 5. List the top five genres in gross revenue in descending order.
+
+
+-- 6. Is "Academy Dinosaur" available for rent from Store 1?
+
+
+-- 7. Get all pairs of actors that worked together.
+SELECT CONCAT(a.first_name,' ',a.last_name) AS 'actor_name'
+FROM actor a
+JOIN film_actor f
+ON a.actor_id = f.actor_id 
+GROUP BY film_id;
+
+-- 8. Get all pairs of customers that have rented the same film more than 3 times.
+
+
+-- 9. For each film, list actor that has acted in more films.
+
