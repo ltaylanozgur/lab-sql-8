@@ -52,7 +52,14 @@ ON r.rental_id = p.rental_id
 GROUP BY c.name;
 
 -- 6. Is "Academy Dinosaur" available for rent from Store 1?
-
+SELECT f.title AS 'film_name', COUNT(s.store_id) AS 'available'
+FROM film f
+JOIN inventory i
+ON f.film_id = i.film_id
+JOIN store s
+ON i.store_id = s.store_id
+WHERE f.title = 'ACADEMY DINOSAUR' AND s.store_id = 1
+GROUP BY f.title;
 
 
 -- 7. Get all pairs of actors that worked together.
