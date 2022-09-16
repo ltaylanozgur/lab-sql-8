@@ -39,17 +39,29 @@ ORDER BY SUM(f.rental_rate) DESC;
 
 
 -- 5. List the top five genres in gross revenue in descending order.
-
+SELECT c.name AS 'genres', SUM(p.amount) AS 'gross_revenue'
+FROM category c
+JOIN film_category f
+ON c.category_id = f.category_id
+JOIN inventory i
+ON f.film_id  = i.film_id
+JOIN rental r
+ON i.inventory_id = r.inventory_id
+JOIN payment p
+ON r.rental_id = p.rental_id
+GROUP BY c.name;
 
 -- 6. Is "Academy Dinosaur" available for rent from Store 1?
 
 
+
 -- 7. Get all pairs of actors that worked together.
-SELECT CONCAT(a.first_name,' ',a.last_name) AS 'actor_name'
-FROM actor a
-JOIN film_actor f
-ON a.actor_id = f.actor_id 
-GROUP BY film_id;
+SELECT a1.actor_id AS 'Actor_1', a2.actor_id AS 'Actor_2', a1.film_id
+FROM film_actor a1
+JOIN film_actor a2
+ON (a1.actor_id <> a2.actor_id) AND (a1.film_id = a2.film_id)
+ORDER BY a1.actor_id;
+
 
 -- 8. Get all pairs of customers that have rented the same film more than 3 times.
 
