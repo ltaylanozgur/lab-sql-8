@@ -32,10 +32,15 @@ ORDER BY AVG(i.length) DESC;
 
 
 -- 4. Display the most frequently rented movies in descending order.
-SELECT f.title AS 'film', SUM(f.rental_rate) AS 'rental frequency'
-FROM film f
+SELECT COUNT(f.film_id) AS frequency_rent, f.title
+FROM rental r
+JOIN inventory i
+USING (inventory_id)
+JOIN film f
+USING (film_id)
 GROUP BY f.title
-ORDER BY SUM(f.rental_rate) DESC;
+ORDER BY frequency_rent DESC
+LIMIT 1;
 
 
 -- 5. List the top five genres in gross revenue in descending order.
