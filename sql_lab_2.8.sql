@@ -76,7 +76,47 @@ ORDER BY a1.actor_id;
 
 
 -- 8. Get all pairs of customers that have rented the same film more than 3 times.
+SELECT
+     t1.customer_id AS Customer1,
+	 t2.customer_id AS Customer2
+FROM
+	sakila.rental AS t1
+INNER JOIN sakila.rental AS t2 ON t1.rental_id != t2.rental_id
+INNER JOIN inventory AS t3 ON t1.inventory_id = t3.inventory_id
+Join customer as c1 on c1.customer_id=t1.customer_id
+Join customer as c2 on c2.customer_id=t1.customer_id
+WHERE
+	t3.film_id = t3.film_id
+AND 
+	t1.inventory_id = t2.inventory_id
+GROUP BY
+	Customer1,
+    Customer2
+HAVING
+	COUNT(Distinct t1.rental_id) > 3;
 
 
 -- 9. For each film, list actor that has acted in more films.
+SET sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY',''));
+
+SELECT film.title AS Movie, concat(actor.first_name,' ',actor.last_name) AS Actor, max(t1.ct) AS 'Acted films'
+FROM(
+	SELECT actor_id, count(film_id) AS ct
+    FROM film_actor
+    GROUP BY actor_id
+    ORDER BY COUNT(film_id)
+							)t1
+JOIN (
+		SELECT actor_id, film_id
+        FROM film_actor
+							)t2
+ON t2.actor_id = t1.actor_id
+JOIN film
+ON film.film_id = t2.film_id
+JOIN actor
+ON actor.actor_id = t1.actor_id
+GROUP BY t2.film_id
+ORDER BY t2.film_id ASC;
+
+
 
